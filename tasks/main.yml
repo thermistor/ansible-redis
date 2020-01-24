@@ -7,12 +7,6 @@
       - redis-tools
     state: present
 
-- name: Install the redis config
-  template:
-    src: "{{ redis_instance_name }}.conf.j2"
-    dest: /etc/redis/{{ redis_instance_name }}.conf
-  notify: restart redis
-
 - name: Install the the systemd config
   template:
     src: redis-server.service.j2
@@ -20,6 +14,20 @@
 
 - name: Symlink systemd config into /etc/systemd/system
   file:
-    path: /etc/systemd/system/{{ redis_instance_name }}-server.service
+    path: /etc/systemd/system/{{ redis_instance_name }}.service
     src: /lib/systemd/system/{{ redis_instance_name }}-server.service
     state: link
+
+- name: Ensure redis data directory exists
+  file:
+    path: "{{ redis_dir }}"
+    state: directory
+    owner: redis
+    group: redis
+    mode: 0750
+
+- name: Install the redis config
+  template:
+    src: "redis.conf.j2"
+    dest: /etc/redis/{{ redis_instance_name }}.conf
+  notify: restart redis
