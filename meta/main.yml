@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: redis
   author: Weston Triemstra
   description: Configure redis
   company: Netsign
