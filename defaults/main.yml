@@ -1,9 +1,10 @@
 ---
 redis_port: 6379
 redis_instance_name: redis
+redis_instance_fullname: redis-server
 redis_maxmemory: ~
 redis_maxmemory_policy: noeviction
 redis_config_file: /etc/redis/{{ redis_instance_name }}.conf
-redis_pid_file: /var/run/redis/{{ redis_instance_name }}-server.pid
-redis_log_file: /var/log/redis/{{ redis_instance_name }}-server.log
+redis_pid_file: /var/run/redis/{{ redis_instance_fullname }}.pid
+redis_log_file: /var/log/redis/{{ redis_instance_fullname }}.log
 redis_dir: /var/lib/{{ redis_instance_name }}

@@ -10,12 +10,12 @@
 - name: Install the the systemd config
   template:
     src: redis-server.service.j2
-    dest: /lib/systemd/system/{{ redis_instance_name }}-server.service
+    dest: /lib/systemd/system/{{ redis_instance_fullname }}.service
 
 - name: Symlink systemd config into /etc/systemd/system
   file:
     path: /etc/systemd/system/{{ redis_instance_name }}.service
-    src: /lib/systemd/system/{{ redis_instance_name }}-server.service
+    src: /lib/systemd/system/{{ redis_instance_fullname }}.service
     state: link
 
 - name: Ensure redis data directory exists
@@ -30,4 +30,13 @@
   template:
     src: "redis.conf.j2"
     dest: /etc/redis/{{ redis_instance_name }}.conf
-  notify: restart redis
+  notify: restart redis {{ redis_instance_name }}
+
+- name: Force systemd to reread configs (2.4 and above)
+  systemd:
+    daemon_reload: yes
+
+- name: Ensure service is enabled
+  systemd:
+    name: "{{ redis_instance_name }}"
+    enabled: yes
