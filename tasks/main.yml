@@ -12,12 +12,6 @@
     src: redis-server.service.j2
     dest: /lib/systemd/system/{{ redis_instance_fullname }}.service
 
-- name: Symlink systemd config into /etc/systemd/system
-  file:
-    path: /etc/systemd/system/{{ redis_instance_name }}.service
-    src: /lib/systemd/system/{{ redis_instance_fullname }}.service
-    state: link
-
 - name: Ensure redis data directory exists
   file:
     path: "{{ redis_dir }}"
