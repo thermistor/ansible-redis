@@ -14,7 +14,7 @@ Here are some defaults that control behavior, appropriate for sidekiq:
     redis_maxmemory_policy: noeviction
     redis_config_file: /etc/redis/redis.conf
     redis_pid_file: /var/run/redis/redis-server.pid
-    redis_log_file: /var/log/redis/redis-server.log
+    redis_log_file: /var/log/redis/redis.log
     redis_dir: /var/lib/redis
 
 ## Examples
@@ -33,16 +33,14 @@ Here is how to run two instances:
         - role: thermistor.redis
           redis_instance_name: redis-cache
           redis_port: 6380
-          redis_maxmemory: 104857600 # 100MB
+          redis_maxmemory: 100M
           redis_maxmemory_policy: allkeys-lfu
+
+Note that although the redis.conf shows it running daemonized and not supervised the command line options in the redis-server.service file override that.
 
 Note how for the 2nd instance the following vars are derived from the instance name:
 
-    redis_config_file: /etc/redis/redis-cache.conf
-    redis_pid_file: /var/run/redis/redis-cache-server.pid
-    redis_log_file: /var/log/redis/redis-cache-server.log
+    redis_config_file: /etc/redis-cache/redis.conf
+    redis_pid_file: /var/run/redis-cache/redis-server.pid
+    redis_log_file: /var/log/redis-cache/redis.log
     redis_dir: /var/lib/redis-cache
-
-
-
-

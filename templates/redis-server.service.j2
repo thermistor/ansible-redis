@@ -13,7 +13,7 @@ TimeoutStopSec=0
 Restart=always
 User=redis
 Group=redis
-RuntimeDirectory=redis
+RuntimeDirectory={{ redis_instance_name }}
 RuntimeDirectoryMode=2755
 
 UMask=007
@@ -23,8 +23,8 @@ PrivateDevices=yes
 ProtectHome=yes
 ReadOnlyDirectories=/
 ReadWriteDirectories=-{{ redis_dir }}
-ReadWriteDirectories=-/var/log/redis
-ReadWriteDirectories=-/var/run/redis
+ReadWriteDirectories=-/var/log/{{ redis_instance_name }}
+ReadWriteDirectories=-/var/run/{{ redis_instance_name }}
 
 NoNewPrivileges=true
 CapabilityBoundingSet=CAP_SETGID CAP_SETUID CAP_SYS_RESOURCE
@@ -40,7 +40,7 @@ RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 # permit writing there by default. If you are not using this feature, it is
 # recommended that you replace the following lines with "ProtectSystem=full".
 ProtectSystem=true
-ReadWriteDirectories=-/etc/redis
+ReadWriteDirectories=-/etc/{{ redis_instance_name }}
 
 [Install]
 WantedBy=multi-user.target

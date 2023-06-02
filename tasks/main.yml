@@ -1,36 +1,62 @@
 ---
 
 - name: Install redis packages
-  apt:
+  ansible.builtin.apt:
     pkg:
       - redis-server
       - redis-tools
     state: present
 
 - name: Install the the systemd config
-  template:
+  ansible.builtin.template:
     src: redis-server.service.j2
-    dest: /lib/systemd/system/{{ redis_instance_fullname }}.service
+    dest: /lib/systemd/system/{{ redis_instance_name }}-server.service
+    mode: '0644'
+
+- name: Symlink systemd config into /etc/systemd/system
+  ansible.builtin.file:
+    path: /etc/systemd/system/{{ redis_instance_name }}.service
+    src: /lib/systemd/system/{{ redis_instance_name }}-server.service
+    state: link
 
 - name: Ensure redis data directory exists
-  file:
+  ansible.builtin.file:
     path: "{{ redis_dir }}"
     state: directory
     owner: redis
     group: redis
-    mode: 0750
+    mode: '0750'
+
+- name: Ensure redis log directory exists
+  ansible.builtin.file:
+    path: /var/log/{{ redis_instance_name }}
+    state: directory
+    owner: redis
+    group: adm
+    mode: '0750'
+
+- name: Ensure redis config directory exists
+  ansible.builtin.file:
+    path: /etc/{{ redis_instance_name }}
+    state: directory
+    owner: redis
+    group: redis
+    mode: '0750'
 
 - name: Install the redis config
-  template:
+  ansible.builtin.template:
     src: "redis.conf.j2"
-    dest: /etc/redis/{{ redis_instance_name }}.conf
-  notify: restart redis {{ redis_instance_name }}
+    dest: /etc/{{ redis_instance_name }}/redis.conf
+    mode: '0640'
+    owner: redis
+    group: redis
+  notify: Restart redis {{ redis_instance_name }}
 
 - name: Force systemd to reread configs (2.4 and above)
-  systemd:
-    daemon_reload: yes
+  ansible.builtin.systemd:
+    daemon_reload: true
 
 - name: Ensure service is enabled
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ redis_instance_name }}"
-    enabled: yes
+    enabled: true
