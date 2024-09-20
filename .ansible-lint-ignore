@@ -1,0 +1,2 @@
+# This file contains ignores rule violations for ansible-lint
+github/workflows/ansible-lint.yml yaml[truthy]
