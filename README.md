@@ -13,8 +13,8 @@ Here are some defaults that control behavior, appropriate for sidekiq:
     redis_maxmemory: ~
     redis_maxmemory_policy: noeviction
     redis_config_file: /etc/redis/redis.conf
-    redis_pid_file: /var/run/redis/redis-server.pid
-    redis_log_file: /var/log/redis/redis.log
+    redis_pid_file: /run/redis/redis-server.pid
+    redis_log_file: /var/log/redis/redis-server.log
     redis_dir: /var/lib/redis
 
 ## Examples
@@ -41,6 +41,6 @@ Note that although the redis.conf shows it running daemonized and not supervised
 Note how for the 2nd instance the following vars are derived from the instance name:
 
     redis_config_file: /etc/redis-cache/redis.conf
-    redis_pid_file: /var/run/redis-cache/redis-server.pid
-    redis_log_file: /var/log/redis-cache/redis.log
+    redis_pid_file: /run/redis-cache/redis-server.pid
+    redis_log_file: /var/log/redis-cache/redis-server.log
     redis_dir: /var/lib/redis-cache
