@@ -4,6 +4,8 @@ redis_instance_name: redis
 redis_maxmemory: ~
 redis_maxmemory_policy: noeviction
 redis_config_file: /etc/{{ redis_instance_name }}/redis.conf
-redis_pid_file: /var/run/{{ redis_instance_name }}/redis-server.pid
-redis_log_file: /var/log/{{ redis_instance_name }}/redis.log
+redis_pid_file: /run/{{ redis_instance_name }}/redis-server.pid
+redis_log_file: /var/log/{{ redis_instance_name }}/redis-server.log
 redis_dir: /var/lib/{{ redis_instance_name }}
+redis_keyring_file: /etc/apt/keyrings/redis-archive-keyring.asc
+redis_repository_url: https://packages.redis.io/deb

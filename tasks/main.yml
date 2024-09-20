@@ -1,10 +1,21 @@
 ---
 
+
+- name: Download redis repository key
+  ansible.builtin.get_url:
+    url: https://packages.redis.io/gpg
+    dest: "{{ redis_keyring_file }}"
+    mode: '0644'
+
+- name: Configure redis repository to use key
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by={{ redis_keyring_file }}] {{ redis_repository_url }} {{ ansible_distribution_release }} main"
+    state: present
+
 - name: Install redis packages
   ansible.builtin.apt:
     pkg:
-      - redis-server
-      - redis-tools
+      - redis
     state: present
 
 - name: Install the the systemd config
@@ -50,7 +61,7 @@
     mode: '0640'
     owner: redis
     group: redis
-  notify: Restart redis {{ redis_instance_name }}
+  notify: Restart {{ redis_instance_name }}
 
 - name: Force systemd to reread configs (2.4 and above)
   ansible.builtin.systemd:

@@ -1,5 +1,5 @@
 ---
-- name: Restart redis {{ redis_instance_name }}
+- name: Restart {{ redis_instance_name }}
   ansible.builtin.systemd:
     name: "{{ redis_instance_name }}"
     state: restarted
