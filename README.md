@@ -21,7 +21,7 @@ The packages.redis.io apt repository is added with `deb822_repository` (needs `p
 
     redis_keyring_file: /etc/apt/keyrings/redis-archive-keyring.asc
     redis_repository_url: https://packages.redis.io/deb
-    redis_repository_suite: "{{ ansible_distribution_release }}"
+    redis_repository_suite: "{{ ansible_facts['distribution_release'] }}"
 
 ## Examples
 

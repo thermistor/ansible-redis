@@ -33,7 +33,7 @@
 - name: Update apt cache if the redis repository changed
   ansible.builtin.apt:
     update_cache: true
-  when: redis_repository is changed
+  when: redis_repository is changed # noqa: no-handler
 
 - name: Install redis packages
   ansible.builtin.apt:
