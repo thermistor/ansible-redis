@@ -77,6 +77,16 @@
     group: redis
     mode: '0750'
 
+# Redis warns at startup without this, a background save (fork) can fail under memory pressure
+- name: Enable memory overcommit for redis
+  ansible.posix.sysctl:
+    name: vm.overcommit_memory
+    value: "{{ redis_vm_overcommit_memory }}"
+    sysctl_file: /etc/sysctl.d/60-redis.conf
+    sysctl_set: true
+    reload: true
+    state: present
+
 - name: Install the redis config
   ansible.builtin.template:
     src: "redis.conf.j2"

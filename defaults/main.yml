@@ -10,3 +10,4 @@ redis_dir: /var/lib/{{ redis_instance_name }}
 redis_keyring_file: /etc/apt/keyrings/redis-archive-keyring.asc
 redis_repository_url: https://packages.redis.io/deb
 redis_repository_suite: "{{ ansible_facts['distribution_release'] }}"
+redis_vm_overcommit_memory: 1

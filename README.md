@@ -23,6 +23,10 @@ The packages.redis.io apt repository is added with `deb822_repository` (needs `p
     redis_repository_url: https://packages.redis.io/deb
     redis_repository_suite: "{{ ansible_facts['distribution_release'] }}"
 
+`vm.overcommit_memory` is set host-wide (persisted in `/etc/sysctl.d/60-redis.conf`) so background saves don't fail under memory pressure, as recommended by redis on startup. Requires the `ansible.posix` collection:
+
+    redis_vm_overcommit_memory: 1
+
 ## Examples
 
 Here is the basic usage:
