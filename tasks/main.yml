@@ -41,13 +41,13 @@
       - redis
     state: present
 
-- name: Install the the systemd config
+- name: Install the the systemd config for {{ redis_instance_name }}
   ansible.builtin.template:
     src: redis-server.service.j2
     dest: /lib/systemd/system/{{ redis_instance_name }}-server.service
     mode: '0644'
 
-- name: Ensure redis data directory exists
+- name: Ensure redis data directory exists for {{ redis_instance_name }}
   ansible.builtin.file:
     path: "{{ redis_dir }}"
     state: directory
@@ -55,7 +55,7 @@
     group: redis
     mode: '0750'
 
-- name: Ensure redis log directory exists
+- name: Ensure redis log directory exists for {{ redis_instance_name }}
   ansible.builtin.file:
     path: /var/log/{{ redis_instance_name }}
     state: directory
@@ -63,7 +63,7 @@
     group: adm
     mode: '0750'
 
-- name: Ensure redis config directory exists
+- name: Ensure redis config directory exists for {{ redis_instance_name }}
   ansible.builtin.file:
     path: /etc/{{ redis_instance_name }}
     state: directory
@@ -81,7 +81,7 @@
     reload: true
     state: present
 
-- name: Install the redis config
+- name: Install the redis config for {{ redis_instance_name }}
   ansible.builtin.template:
     src: "redis.conf.j2"
     dest: /etc/{{ redis_instance_name }}/redis.conf
@@ -104,7 +104,7 @@
     creates: /etc/systemd/system/multi-user.target.wants/{{ redis_instance_name }}-server.service
 
 # Started here too, the restart handler doesn't run if the play fails before handlers are flushed
-- name: Ensure service is enabled and started
+- name: Ensure service is enabled and started for {{ redis_instance_name }}
   ansible.builtin.systemd:
     name: "{{ redis_instance_name }}-server"
     enabled: true
