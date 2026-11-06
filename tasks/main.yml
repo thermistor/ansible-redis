@@ -47,12 +47,6 @@
     dest: /lib/systemd/system/{{ redis_instance_name }}-server.service
     mode: '0644'
 
-- name: Symlink systemd config into /etc/systemd/system
-  ansible.builtin.file:
-    path: /etc/systemd/system/{{ redis_instance_name }}.service
-    src: /lib/systemd/system/{{ redis_instance_name }}-server.service
-    state: link
-
 - name: Ensure redis data directory exists
   ansible.builtin.file:
     path: "{{ redis_dir }}"
@@ -99,6 +93,15 @@
 - name: Force systemd to reread configs (2.4 and above)
   ansible.builtin.systemd:
     daemon_reload: true
+
+# Creates the multi-user.target.wants link (start at boot) and the Alias= symlink. The systemd
+# module can't be relied on for this: hosts set up before Alias= was declared for every instance
+# have an undeclared alias symlink, so is-enabled reports "indirect" and older ansible versions
+# treated that as already enabled.
+- name: Enable at boot {{ redis_instance_name }}
+  ansible.builtin.command: systemctl enable {{ redis_instance_name }}-server # noqa: command-instead-of-module
+  args:
+    creates: /etc/systemd/system/multi-user.target.wants/{{ redis_instance_name }}-server.service
 
 # Started here too, the restart handler doesn't run if the play fails before handlers are flushed
 - name: Ensure service is enabled and started

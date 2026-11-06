@@ -44,4 +44,4 @@ ReadWriteDirectories=-/etc/{{ redis_instance_name }}
 
 [Install]
 WantedBy=multi-user.target
-{% if redis_instance_name == 'redis' %}Alias=redis.service{% endif %}
+Alias={{ redis_instance_name }}.service
